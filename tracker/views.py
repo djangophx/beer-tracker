@@ -1,3 +1,4 @@
+from django.db.models import Count, Prefetch
 from django.views.generic import DetailView, ListView
 
 from . import models
@@ -8,7 +9,7 @@ class BeerDetail(DetailView):
 
 
 class BeerList(ListView):
-    model = models.Beer
+    queryset = models.Beer.objects.select_related('brewery', 'style')
 
 
 class BreweryDetail(DetailView):
@@ -32,4 +33,11 @@ class VenueDetail(DetailView):
 
 
 class VenueList(ListView):
-    model = models.Venue
+    queryset = models.Venue.objects.annotate(
+        beer_count=Count('beers')
+    ).prefetch_related(
+        Prefetch(
+            'beers',
+            queryset=models.Beer.objects.select_related('brewery', 'style')
+        )
+    )

@@ -1,0 +1,20 @@
+<html>
+  <body>
+    <h1>All Beers</h1>
+    {% for beer in object_list %}
+    {% if forloop.first %}
+    <ul>
+    {% endif %}
+      <li>
+        <a href="{{ beer.get_absolute_url }}">{{ beer.name }}</a>
+        from <a href="{{ beer.brewery.get_absolute_url }}">{{ beer.brewery.name }}</a>
+        (<a href="{{ beer.style.get_absolute_url }}">{{ beer.style.name }}</a>)
+      </li>
+    {% if forloop.last %}
+    </ul>
+    {% endif %}
+    {% empty %}
+    Sorry, there are no beers listed yet!
+    {% endfor %}
+  </body>
+</html>
