@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 class Brewery(models.Model):
@@ -6,9 +7,21 @@ class Brewery(models.Model):
     description = models.TextField()
     location = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('brewery-detail', kwargs={'pk': self.pk})
+
 
 class Style(models.Model):
     name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('style-detail', kwargs={'pk': self.pk})
 
 
 class Beer(models.Model):
@@ -16,6 +29,12 @@ class Beer(models.Model):
     description = models.TextField()
     style = models.ForeignKey(Style, on_delete=models.PROTECT)
     brewery = models.ForeignKey(Brewery, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('beer-detail', kwargs={'pk': self.pk})
 
 
 class Venue(models.Model):
@@ -32,3 +51,9 @@ class Venue(models.Model):
     description = models.TextField()
     venue_type = models.CharField(max_length=5, choices=TYPE_CHOICES)
     beers = models.ManyToManyField(Beer, related_name='venues')
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('venue-detail', kwargs={'pk': self.pk})

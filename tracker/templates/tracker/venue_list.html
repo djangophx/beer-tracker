@@ -1,0 +1,33 @@
+<html>
+  <body>
+    <h1>All Venues</h1>
+    {% for venue in object_list %}
+    {% if forloop.first %}
+    <ul>
+    {% endif %}
+      <li>
+        <a href="{{ venue.get_absolute_url }}">{{ venue.name }}</a> ({{ venue.beer_count }} beers available)
+        {% for beer in venue.beers.all %}
+        {% if forloop.first %}
+        <br><strong>Available beers:</strong>
+        <ul>
+        {% endif %}
+          <li>
+            <a href="{{ beer.get_absolute_url }}">{{ beer.name }}</a>
+            from <a href="{{ beer.brewery.get_absolute_url }}">{{ beer.brewery.name }}</a>
+            (<a href="{{ beer.style.get_absolute_url }}">{{ beer.style.name }}</a>)
+          </li>
+        {% if forloop.last %}
+        </ul>
+        {% endif %}
+        {% endfor %}
+        <br>
+      </li>
+    {% if forloop.last %}
+    </ul>
+    {% endif %}
+    {% empty %}
+    Sorry, there are no venues listed yet!
+    {% endfor %}
+  </body>
+</html>
